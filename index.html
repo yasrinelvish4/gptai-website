@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;500;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Roboto:wght@300;400;700&display=swap');
         
         body {
             font-family: 'Roboto', sans-serif;
@@ -19,277 +19,244 @@
         .gradient-bg {
             background: linear-gradient(135deg, #0c0c1e 0%, #1a0033 50%, #0f0f23 100%);
         }
-        .neon-purple { text-shadow: 0 0 10px #8b5cf6, 0 0 20px #8b5cf6; }
-        .neon-blue { text-shadow: 0 0 10px #06b6d4, 0 0 20px #06b6d4; }
-        .neon-green { text-shadow: 0 0 10px #10b981, 0 0 20px #10b981; }
+        .neon-purple { box-shadow: 0 0 20px #8b5cf6, 0 0 40px #8b5cf6; }
+        .neon-blue { box-shadow: 0 0 20px #06b6d4, 0 0 40px #06b6d4; }
+        .neon-green { box-shadow: 0 0 20px #10b981, 0 0 40px #10b981; }
         .orbitron { font-family: 'Orbitron', monospace; }
         .glass { backdrop-filter: blur(20px); background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.1); }
-        .coin-glow {
-            box-shadow: 
-                0 0 20px rgba(139, 92, 246, 0.5),
-                0 0 40px rgba(139, 92, 246, 0.3),
-                inset 0 0 20px rgba(255,255,255,0.1);
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px); }
-            50% { transform: translateY(-20px); }
-        }
+        @keyframes float { 0%, 100% { transform: translateY(0px); } 50% { transform: translateY(-20px); } }
+        @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.7; } }
+        @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
         .float { animation: float 6s ease-in-out infinite; }
-        @keyframes pulse-glow {
-            0%, 100% { box-shadow: 0 0 20px rgba(139,92,246,0.5); }
-            50% { box-shadow: 0 0 40px rgba(139,92,246,0.8), 0 0 60px rgba(139,92,246,0.4); }
+        .pulse { animation: pulse 2s infinite; }
+        .spin { animation: spin 20s linear infinite; }
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 1;
         }
-        .pulse-glow { animation: pulse-glow 2s ease-in-out infinite; }
-        @keyframes spin {
-            from { transform: rotate(0deg); }
-            to { transform: rotate(360deg); }
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: #8b5cf6;
+            border-radius: 50%;
+            animation: particle-float 20s linear infinite;
         }
-        .spin-slow { animation: spin 20s linear infinite; }
+        @keyframes particle-float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-100px) scale(1); opacity: 0; }
+        }
     </style>
 </head>
-<body class="gradient-bg">
-    <!-- Particles Background -->
-    <div id="particles" class="fixed inset-0 z-0 opacity-30"></div>
+<body class="gradient-bg relative">
+    <!-- Animated Particles Background -->
+    <div class="particles" id="particles"></div>
 
-    <!-- Navigation -->
-    <nav class="fixed top-0 w-full z-50 glass px-6 py-4">
-        <div class="max-w-7xl mx-auto flex justify-between items-center">
+    <!-- Header -->
+    <header class="fixed top-0 w-full z-50 glass py-4 px-6">
+        <nav class="flex justify-between items-center max-w-7xl mx-auto">
             <div class="flex items-center space-x-3">
-                <div class="w-12 h-12 coin-glow bg-gradient-to-r from-purple-500 to-blue-500 rounded-full flex items-center justify-center pulse-glow">
+                <div class="w-12 h-12 bg-gradient-to-r from-purple-500 to-blue-500 rounded-full neon-purple flex items-center justify-center spin">
                     <i class="fas fa-robot text-white text-xl"></i>
                 </div>
-                <span class="orbitron text-2xl font-bold neon-purple">GPTAI</span>
+                <span class="orbitron text-2xl font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">
+                    GPTAI
+                </span>
             </div>
-            <div class="hidden md:flex space-x-6">
-                <a href="#token" class="hover:neon-blue transition-all duration-300">Token</a>
-                <a href="#roadmap" class="hover:neon-green transition-all duration-300">Roadmap</a>
-                <a href="#features" class="hover:neon-purple transition-all duration-300">Features</a>
+            <div class="hidden md:flex space-x-4">
+                <a href="#tokenomics" class="hover:neon-purple transition-all duration-300">Tokenomics</a>
+                <a href="#roadmap" class="hover:neon-blue transition-all duration-300">Roadmap</a>
+                <a href="#features" class="hover:neon-green transition-all duration-300">Features</a>
             </div>
-            <div class="flex space-x-4">
-                <button class="px-6 py-2 bg-gradient-to-r from-purple-600 to-blue-600 rounded-full hover:from-purple-700 hover:to-blue-700 transition-all duration-300 font-semibold">
-                    Buy GPTAI
-                </button>
-            </div>
-        </div>
-    </nav>
+        </nav>
+    </header>
 
     <!-- Hero Section -->
-    <section class="min-h-screen flex items-center justify-center pt-20 px-6 relative overflow-hidden">
-        <div class="max-w-7xl mx-auto text-center z-10">
-            <!-- Trending Badge -->
-            <div class="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 px-6 py-2 rounded-full mb-8 glass backdrop-blur-sm">
-                <span class="text-2xl mr-2">🔥</span>
-                <span class="font-bold text-lg">TOP TRENDING COIN</span>
-                <span class="ml-2 text-2xl">🚀</span>
+    <section class="min-h-screen flex items-center justify-center relative pt-20 px-6 overflow-hidden">
+        <div class="text-center max-w-4xl mx-auto z-10 relative">
+            <!-- Top Trending Badge -->
+            <div class="inline-flex items-center bg-gradient-to-r from-yellow-400 to-orange-500 text-black px-6 py-2 rounded-full mb-8 orbitron font-bold text-lg shadow-2xl">
+                <i class="fas fa-fire mr-2 text-xl"></i>
+                🔥 TOP TRENDING ON PUMP.FUN 🚀 TO THE MOON
             </div>
             
-            <!-- Logo -->
-            <div class="mx-auto w-48 h-48 mb-12 float spin-slow">
-                <svg viewBox="0 0 200 200" class="w-full h-full">
-                    <defs>
-                        <radialGradient id="coinGradient" cx="50%" cy="50%">
-                            <stop offset="0%" stop-color="#8b5cf6"/>
-                            <stop offset="50%" stop-color="#06b6d4"/>
-                            <stop offset="100%" stop-color="#1e1b4b"/>
-                        </radialGradient>
-                        <filter id="glow">
-                            <feGaussianBlur stdDeviation="3" flood-color="#8b5cf6" result="coloredBlur"/>
-                            <feMerge> 
-                                <feMergeNode in="coloredBlur"/>
-                                <feMergeNode in="SourceGraphic"/>
-                            </feMerge>
-                        </filter>
-                    </defs>
-                    <circle cx="100" cy="100" r="90" fill="url(#coinGradient)" filter="url(#glow)" class="coin-glow"/>
-                    <circle cx="100" cy="100" r="70" fill="none" stroke="#ffffff" stroke-width="3" opacity="0.3"/>
-                    <text x="100" y="105" font-family="Orbitron, monospace" font-size="28" font-weight="900" text-anchor="middle" fill="white" filter="url(#glow)">GPTAI</text>
-                    <circle cx="100" cy="140" r="25" fill="#10b981" class="pulse-glow">
-                        <animate attributeName="r" values="25;28;25" dur="2s" repeatCount="indefinite"/>
-                    </circle>
-                    <text x="100" y="145" font-size="12" text-anchor="middle" fill="white" font-weight="bold">🤖</text>
-                </svg>
+            <!-- Animated Logo -->
+            <div class="mx-auto w-48 h-48 mb-12 relative">
+                <div class="w-full h-full rounded-full bg-gradient-to-r from-purple-500 via-blue-500 to-green-500 neon-purple relative overflow-hidden float">
+                    <div class="absolute inset-0 bg-[radial-gradient(circle_at_20%_80%,rgba(120,119,198,0.3),transparent),radial-gradient(circle_at_80%_20%,rgba(120,119,198,0.3),transparent)]"></div>
+                    <i class="fas fa-brain text-5xl text-white absolute inset-1/2 transform -translate-x-1/2 -translate-y-1/2 neon-green"></i>
+                    <div class="absolute -inset-2 bg-gradient-to-r from-purple-400 to-blue-400 rounded-full blur-xl opacity-50 animate-pulse"></div>
+                </div>
+                <div class="absolute -top-4 -right-4 w-24 h-24 bg-green-500 rounded-full opacity-30 animate-pulse"></div>
+                <div class="absolute -bottom-4 -left-4 w-20 h-20 bg-blue-500 rounded-full opacity-30 animate-pulse delay-1000"></div>
             </div>
 
-            <h1 class="orbitron text-6xl md:text-7xl font-black mb-6 neon-purple leading-tight">
+            <h1 class="orbitron text-5xl md:text-7xl font-black mb-6 bg-gradient-to-r from-purple-400 via-blue-400 to-green-400 bg-clip-text text-transparent leading-tight">
                 GPTAI
             </h1>
-            <p class="text-2xl md:text-3xl mb-12 opacity-90 max-w-3xl mx-auto leading-relaxed">
+            <p class="text-2xl md:text-3xl mb-12 font-light text-gray-300 max-w-2xl mx-auto leading-relaxed">
                 The Smartest Meme Coin<br>
-                <span class="neon-blue">Powered by AI</span>
+                <span class="font-bold bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Powered by AI</span>
             </p>
-            <p class="text-xl md:text-2xl mb-12 opacity-75 max-w-2xl mx-auto">
-                Not just a meme. This is <span class="neon-green">AI evolution on-chain</span>
+            <p class="text-xl mb-12 text-gray-400 max-w-2xl mx-auto leading-relaxed">
+                Not just a meme. This is AI evolution on-chain.
             </p>
 
-            <!-- Launch Countdown -->
-            <div class="glass p-8 rounded-3xl max-w-2xl mx-auto mb-12">
-                <p class="text-lg mb-6 opacity-75">🚀 Launch in</p>
-                <div class="grid grid-cols-4 gap-6 text-center">
-                    <div>
-                        <div class="orbitron text-4xl font-bold neon-purple" id="days">00</div>
-                        <div class="text-sm opacity-75">Days</div>
-                    </div>
-                    <div>
-                        <div class="orbitron text-4xl font-bold neon-blue" id="hours">00</div>
-                        <div class="text-sm opacity-75">Hours</div>
-                    </div>
-                    <div>
-                        <div class="orbitron text-4xl font-bold neon-green" id="minutes">00</div>
-                        <div class="text-sm opacity-75">Minutes</div>
-                    </div>
-                    <div>
-                        <div class="orbitron text-4xl font-bold neon-purple" id="seconds">00</div>
-                        <div class="text-sm opacity-75">Seconds</div>
-                    </div>
+            <!-- Buy Buttons -->
+            <div class="flex flex-col sm:flex-row gap-6 justify-center items-center mb-16">
+                <a href="#buy" class="group bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold py-5 px-12 rounded-full text-xl neon-purple transform hover:scale-105 transition-all duration-300 glass">
+                    <i class="fas fa-rocket mr-3 group-hover:animate-pulse"></i>
+                    Buy GPTAI Now
+                </a>
+                <div class="flex space-x-4">
+                    <a href="https://x.com/GPTAI_Community" target="_blank" class="w-16 h-16 bg-blue-600 hover:bg-blue-500 neon-blue rounded-full flex items-center justify-center text-2xl hover:scale-110 transition-all duration-300">
+                        <i class="fab fa-twitter"></i>
+                    </a>
+                    <a href="https://t.me/GPTAI_Official" target="_blank" class="w-16 h-16 bg-blue-700 hover:bg-blue-600 neon-blue rounded-full flex items-center justify-center text-2xl hover:scale-110 transition-all duration-300">
+                        <i class="fab fa-telegram"></i>
+                    </a>
                 </div>
             </div>
 
-            <!-- CTA Buttons -->
-            <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
-                <button class="px-12 py-6 bg-gradient-to-r from-purple-600 to-blue-600 text-xl font-bold rounded-full hover:from-purple-700 hover:to-blue-700 transition-all duration-300 transform hover:scale-105 shadow-2xl pulse-glow">
-                    🛒 Buy GPTAI Now
-                </button>
-                <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-2xl mx-auto">
-
-    </button>
-
-    <!-- Telegram -->
-    <a href="https://t.me/GPTAI_Official" target="_blank"
-       class="px-12 py-6 bg-blue-500 text-xl font-bold rounded-full hover:scale-105 transition">
-        💬 Join Telegram
-    </a>
-
-    <!-- Twitter -->
-    <a href="https://x.com/GPTAI_Community" target="_blank"
-       class="px-12 py-6 border-2 border-purple-500 text-xl font-bold rounded-full hover:bg-purple-500/20 transition">
-        🐦 Follow X
-    </a>
-
-</div>
-
-<!-- Social Icons -->
-<div class="flex justify-center space-x-6 mt-6 text-2xl">
-    <a href="https://t.me/GPTAI_Official" target="_blank"><i class="fab fa-telegram"></i></a>
-    <a href="https://x.com/GPTAI_Community" target="_blank"><i class="fab fa-twitter"></i></a>
-</div>
-            </div>
-
-            <!-- Live Buy Notifications -->
-            <div class="mt-16 space-y-2">
-                <div id="notifications" class="space-y-2"></div>
+            <!-- Live Price Counter -->
+            <div class="glass p-8 rounded-3xl max-w-md mx-auto">
+                <div class="grid grid-cols-2 gap-8 text-center">
+                    <div>
+                        <p class="text-sm text-gray-400 uppercase tracking-wider orbitron">Live Price</p>
+                        <div class="text-3xl font-black orbitron bg-gradient-to-r from-green-400 to-green-600 bg-clip-text text-transparent" id="price">$0.<span id="priceDecimals">042</span></div>
+                    </div>
+                    <div>
+                        <p class="text-sm text-gray-400 uppercase tracking-wider orbitron">Market Cap</p>
+                        <div class="text-3xl font-black orbitron bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent" id="marketCap">$4.2<span class="text-lg">M</span></div>
+                    </div>
+                </div>
             </div>
         </div>
     </section>
 
-    <!-- Live Price Ticker -->
-    <div class="fixed right-6 top-32 z-40 glass p-4 rounded-2xl shadow-2xl hidden lg:block">
-        <div class="flex items-center space-x-3 mb-2">
-            <div class="w-8 h-8 bg-gradient-to-r from-green-400 to-blue-500 rounded-full flex items-center justify-center">
-                <i class="fas fa-chart-line text-xs"></i>
-            </div>
-            <span class="font-bold text-sm">GPTAI Live Price</span>
-        </div>
-        <div class="text-2xl font-black neon-green" id="livePrice">$0.<span id="priceDigits">00042</span></div>
-        <div class="text-xs opacity-75 flex items-center">
-            <span class="text-green-400 mr-1">+342.1%</span> 24h
-        </div>
-    </div>
-
-    <!-- Token Info -->
-    <section id="token" class="py-32 px-6">
+    <!-- Tokenomics Section -->
+    <section id="tokenomics" class="py-32 px-6">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-24">
-                <h2 class="orbitron text-5xl font-black mb-6 neon-blue">Token Information</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-blue-500 mx-auto rounded-full pulse-glow"></div>
+                <h2 class="orbitron text-5xl font-black mb-6 bg-gradient-to-r from-purple-400 to-blue-400 bg-clip-text text-transparent">Tokenomics</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Simple. Fair. Deflationary.</p>
             </div>
             
             <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
                 <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all duration-300">
-                    <div class="text-4xl mb-4">🎯</div>
-                    <div class="text-3xl font-black neon-purple mb-2">1B</div>
-                    <div class="opacity-75">Total Supply</div>
+                    <div class="w-20 h-20 bg-green-500 neon-green rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <i class="fas fa-coins text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 orbitron">Total Supply</h3>
+                    <p class="text-3xl font-black text-green-400">1B GPTAI</p>
                 </div>
                 <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all duration-300">
-                    <div class="text-4xl mb-4">⚡</div>
-                    <div class="text-3xl font-black neon-green mb-2">Solana</div>
-                    <div class="opacity-75">Lightning Fast</div>
+                    <div class="w-20 h-20 bg-purple-500 neon-purple rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <i class="fas fa-fire text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 orbitron">Tax</h3>
+                    <p class="text-3xl font-black text-purple-400">0% Buy / 0% Sell</p>
                 </div>
                 <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all duration-300">
-                    <div class="text-4xl mb-4">🔥</div>
-                    <div class="text-3xl font-black neon-blue mb-2">0%</div>
-                    <div class="opacity-75">Buy/Sell Tax</div>
+                    <div class="w-20 h-20 bg-blue-500 neon-blue rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <i class="fas fa-lock text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 orbitron">Liquidity</h3>
+                    <p class="text-3xl font-black text-blue-400">Burned</p>
                 </div>
                 <div class="glass p-8 rounded-3xl text-center hover:scale-105 transition-all duration-300">
-                    <div class="text-4xl mb-4">🛡</div>
-                    <div class="text-3xl font-black neon-purple mb-2">LP Burned</div>
-                    <div class="opacity-75">100% Safe</div>
-                </div>
-            </div>
-
-            <div class="mt-16 glass p-8 rounded-3xl">
-                <h3 class="text-2xl font-bold mb-6 neon-purple">Contract Address</h3>
-                <div class="bg-black/50 p-4 rounded-2xl font-mono text-sm break-all opacity-75 cursor-pointer hover:opacity-100 transition-opacity">
-                    7xKXtg2CW87d97TXJSDpbD5jBkheTqA83TZRuJosgAsU
+                    <div class="w-20 h-20 bg-orange-500 rounded-2xl mx-auto mb-6 flex items-center justify-center">
+                        <i class="fas fa-infinity text-3xl"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold mb-4 orbitron">Contract</h3>
+                    <p class="text-lg font-mono bg-black p-3 rounded-xl break-all text-gray-300">Ai1...GPTAI</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Roadmap -->
-    <section id="roadmap" class="py-32 px-6 bg-black/30">
+    <!-- Features Section -->
+    <section id="features" class="py-32 px-6 bg-black/30">
         <div class="max-w-6xl mx-auto">
             <div class="text-center mb-24">
-                <h2 class="orbitron text-5xl font-black mb-6 neon-green">Roadmap</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-green-500 to-purple-500 mx-auto rounded-full pulse-glow"></div>
+                <h2 class="orbitron text-5xl font-black mb-6 bg-gradient-to-r from-green-400 to-blue-400 bg-clip-text text-transparent">Why GPTAI?</h2>
+                <p class="text-xl text-gray-400 max-w-2xl mx-auto">Next-level meme coin with AI superpowers</p>
             </div>
             
-            <div class="grid md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-                <div class="relative">
-                    <div class="glass p-8 rounded-3xl mb-8 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">🚀</div>
-                        <h3 class="text-2xl font-bold mb-4 neon-purple">Phase 1</h3>
-                        <p class="opacity-75">Fair Launch & Viral Meme Campaign</p>
+            <div class="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <div class="glass p-10 rounded-3xl hover:neon-green transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-teal-500 neon-green rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                        <i class="fas fa-robot text-3xl"></i>
                     </div>
-                    <div class="glass p-8 rounded-3xl mb-8 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">📈</div>
-                        <h3 class="text-2xl font-bold mb-4 neon-blue">Phase 2</h3>
-                        <p class="opacity-75">Community Growth & Partnerships</p>
-                    </div>
+                    <h3 class="text-2xl font-bold mb-6 orbitron">AI Meme Generator</h3>
+                    <p class="text-gray-400">Generate viral memes instantly with our AI-powered tool. Stay ahead of the curve.</p>
                 </div>
-                <div class="relative">
-                    <div class="glass p-8 rounded-3xl mb-8 hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-r from-green-500 to-purple-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">🤖</div>
-                        <h3 class="text-2xl font-bold mb-4 neon-green">Phase 3</h3>
-                        <p class="opacity-75">AI Meme Generator & NFT Collection</p>
+                <div class="glass p-10 rounded-3xl hover:neon-blue transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-indigo-500 neon-blue rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                        <i class="fas fa-bolt text-3xl"></i>
                     </div>
-                    <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300">
-                        <div class="w-16 h-16 bg-gradient-to-r from-purple-500 to-orange-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-2xl">🏆</div>
-                        <h3 class="text-2xl font-bold mb-4 neon-purple">Phase 4</h3>
-                        <p class="opacity-75">Tier-1 Exchange Listings & AI Platform</p>
+                    <h3 class="text-2xl font-bold mb-6 orbitron">Solana Speed</h3>
+                    <p class="text-gray-400">Lightning-fast transactions on Solana. No more waiting for your gains.</p>
+                </div>
+                <div class="glass p-10 rounded-3xl hover:neon-purple transition-all duration-300 group">
+                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-pink-500 neon-purple rounded-2xl mx-auto mb-8 flex items-center justify-center group-hover:scale-110 transition-all duration-300">
+                        <i class="fas fa-users text-3xl"></i>
                     </div>
+                    <h3 class="text-2xl font-bold mb-6 orbitron">Community Driven</h3>
+                    <p class="text-gray-400">Powered by YOU. The strongest community in crypto. We rise together.</p>
                 </div>
             </div>
         </div>
     </section>
 
-    <!-- Features -->
-    <section id="features" class="py-32 px-6">
-        <div class="max-w-6xl mx-auto">
+    <!-- Roadmap Section -->
+    <section id="roadmap" class="py-32 px-6">
+        <div class="max-w-4xl mx-auto">
             <div class="text-center mb-24">
-                <h2 class="orbitron text-5xl font-black mb-6 neon-purple">Why GPTAI?</h2>
-                <div class="w-24 h-1 bg-gradient-to-r from-purple-500 to-green-500 mx-auto rounded-full pulse-glow"></div>
+                <h2 class="orbitron text-5xl font-black mb-6 bg-gradient-to-r from-purple-400 to-green-400 bg-clip-text text-transparent">Roadmap</h2>
             </div>
             
-            <div class="grid md:grid-cols-2 lg:grid-cols-4 gap-8">
-                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
-                    <div class="w-20 h-20 bg-gradient-to-r from-purple-500 to-blue-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">🤖</div>
-                    <h3 class="text-2xl font-bold mb-4 neon-purple">AI Meme Generator</h3>
-                    <p class="opacity-75">Generate viral memes with GPTAI AI</p>
+            <div class="space-y-8">
+                <div class="glass p-8 lg:p-12 rounded-3xl relative hover:scale-105 transition-all duration-300">
+                    <div class="absolute -left-6 lg:-left-12 w-12 h-12 bg-green-500 neon-green rounded-full flex items-center justify-center text-2xl font-bold">1</div>
+                    <h3 class="text-3xl font-bold mb-6 orbitron">Phase 1 - Launch & Viral</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li>• Fair Launch on Pump.fun</li>
+                        <li>• Liquidity Locked</li>
+                        <li>• Community Building</li>
+                    </ul>
                 </div>
-                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
-                    <div class="w-20 h-20 bg-gradient-to-r from-blue-500 to-green-500 rounded-2xl flex items-center justify-center mx-auto mb-6 text-3xl group-hover:rotate-12 transition-transform duration-300">⚡</div>
-                    <h3 class="text-2xl font-bold mb-4 neon-blue">Lightning Fast</h3>
-                    <p class="opacity-75">Solana speed with Ethereum security</p>
+                <div class="glass p-8 lg:p-12 rounded-3xl relative hover:scale-105 transition-all duration-300">
+                    <div class="absolute -left-6 lg:-left-12 w-12 h-12 bg-blue-500 neon-blue rounded-full flex items-center justify-center text-2xl font-bold">2</div>
+                    <h3 class="text-3xl font-bold mb-6 orbitron">Phase 2 - Community Growth</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li>• Viral Marketing Campaign</li>
+                        <li>• AI Meme Generator Launch</li>
+                        <li>• Major Influencer Partnerships</li>
+                    </ul>
                 </div>
-                <div class="glass p-8 rounded-3xl hover:scale-105 transition-all duration-300 group">
-                    <div class="w-20 h-20 bg-gradient-to-r from-green-500 to-purple-500 rounded-2xl flex items-center justify-center mx
+                <div class="glass p-8 lg:p-12 rounded-3xl relative hover:scale-105 transition-all duration-300">
+                    <div class="absolute -left-6 lg:-left-12 w-12 h-12 bg-purple-500 neon-purple rounded-full flex items-center justify-center text-2xl font-bold">3</div>
+                    <h3 class="text-3xl font-bold mb-6 orbitron">Phase 3 - AI Integration</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li>• AI Trading Assistant</li>
+                        <li>• NFT Collection Drop</li>
+                        <li>• DEX Listings</li>
+                    </ul>
+                </div>
+                <div class="glass p-8 lg:p-12 rounded-3xl relative hover:scale-105 transition-all duration-300">
+                    <div class="absolute -left-6 lg:-left-12 w-12 h-12 bg-gradient-to-r from-orange-500 to-red-500 rounded-full flex items-center justify-center text-2xl font-bold">4</div>
+                    <h3 class="text-3xl font-bold mb-6 orbitron">Phase 4 - CEX & Beyond</h3>
+                    <ul class="space-y-3 text-gray-300">
+                        <li>• Tier 1 Exchange Listings</li>
+                        <li>• AI-Powered DEX</li>
+                        <li>• $1B Market Cap Target</li>
+                    </ul>
+                </
